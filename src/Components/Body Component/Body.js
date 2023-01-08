@@ -1,14 +1,18 @@
 import {useState,useEffect} from "react"
 export default function Body(props){
-    const {majors} = props.formData
-    const checkBoxArr = create_majorCheckboxes()
+    const {majors,genEd} = props.formData
+    const {checkBoxMajor,checkBoxGE} = createCheckboxes()
+
+    // const {checkBoxArr, checkBoxGE} = getCheckBoxes()
 
  
-    function create_majorCheckboxes(){
-        console.log("Majors inside of child: ",majors)
+    function createCheckboxes(){
+        // console.log("Majors inside of child: ",majors)
+        let returnObject = {checkBoxMajor:[], checkBoxGE:[]}
 
-        if(majors){ // Only runs when the data is rendered
-            return majors.map(majorObj =>(
+        if(props.formData){ // Only runs when the data is rendered
+
+            returnObject.checkBoxMajor = majors.map(majorObj =>(
             <label key={majorObj.major} htmlFor={majorObj.major}>
                 <input
                 type="checkbox"
@@ -19,17 +23,39 @@ export default function Body(props){
                 />
                 {majorObj.major}
             </label>))
-            
+
+            returnObject.checkBoxGE = genEd.map(GE_Obj =>(
+                <label key={GE_Obj.GE} htmlFor={GE_Obj.GE}>
+                    <input
+                    type="checkbox"
+                    name="genEd"
+                    value={GE_Obj.GE}
+                    id={GE_Obj.GE}
+                    onChange={props.handleClickCheckboxes}
+                    />
+                    {GE_Obj.GE}
+                </label>))
+
         }
+        return returnObject
     }
 
+    // console.log(checkBoxGE)
 
     //   {!props.collegeMajors ? "Loading" : props.collegeMajors}
     
 
     return(
         <form>
-            {checkBoxArr ? checkBoxArr : "Loading"}
+            <div className="checkBox--div scroll">
+                {!props.formData?  "Loading..." : checkBoxMajor }
+            </div>
+
+            <div className="checkBox--div scroll">
+                {!props.formData?  "Loading..." : checkBoxGE }
+            </div>
+
+
         </form>
 
         // <form>

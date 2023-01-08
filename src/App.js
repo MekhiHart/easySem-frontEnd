@@ -11,7 +11,7 @@ function App() {
   // const [availableMajors, setAvailableMajors] = useState(null)
 
   const [formData, setFormData] = useState({
-    majors: [],
+    majors:[],
     genEd:[],
 })
 
@@ -22,9 +22,19 @@ function App() {
         ...prevFormData,
         majors: data
       })))
-  }, [1]);
+  }, []);
 
-  // console.log("Form Data:",formData.majors)
+  useEffect(() => {
+    fetch("/collegeGE") //  fetches on the specific api you want it too
+      .then((res) => res.json())
+      .then((data) => setFormData(prevFormData => ({
+        ...prevFormData,
+        genEd: data
+      })))
+  }, []);
+
+
+  console.log("Form Data:",formData)
 
 
 
@@ -32,7 +42,8 @@ function App() {
     const {name,value} = event.target
     setFormData(prevFormData => ({
       ...prevFormData,
-      [name]: prevFormData[name].map(obj => value === obj.major ? {...obj, isSelected: !obj.isSelected} : obj)
+      [name]: prevFormData[name].map(obj => value === obj[name === "majors"  ? "major" : "GE"] ? 
+        {...obj, isSelected: !obj.isSelected} : obj)
     }))
 
 
