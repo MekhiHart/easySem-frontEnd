@@ -1,48 +1,64 @@
+import io from "socket.io-client"
 import {useState,useEffect} from "react"
-import logo from './logo.svg';
 import './App.css';
 import {nanoid} from "nanoid"
 
 import Header from "./Components/Header"
 import Body from "./Components/Body Component/Body"
 
+const socket = io.connect("http://localhost:3001") // ! How to implment dynamic connection when server goes to a hosting service
+
 function App() {
 
   // const [availableMajors, setAvailableMajors] = useState(null)
 
   const [formData, setFormData] = useState({
-    majors:[],
-    genEd:[],
+    selectedMajors:[],
+    selectedGenEd:[],
+    classes:[],
 })
 
   useEffect(() => {
-    fetch("/collegeMajors") //  fetches on the specific api you want it too
+    fetch("/get_collegeMajors") //  fetches on the specific api you want it too
       .then((res) => res.json())
       .then((data) => setFormData(prevFormData => ({
         ...prevFormData,
-        majors: data
+        selectedMajors: data
       })))
   }, []);
 
   useEffect(() => {
-    fetch("/collegeGE") //  fetches on the specific api you want it too
+    fetch("/get_collegeGE") //  fetches on the specific api you want it too
       .then((res) => res.json())
       .then((data) => setFormData(prevFormData => ({
         ...prevFormData,
-        genEd: data
+        selectedGenEd: data
       })))
   }, []);
 
+  // useEffect( () =>{
 
-  console.log("Form Data:",formData)
+  //   console.log("From Client")
+  //   const data = {"message":"Hello From Client"}
+  //   const options ={
+  //     method:"POST",
+  //     headers:{
+  //       "Content-type" : "application/json"
+  //     },
+  //     body: JSON.stringify(data)
+  //   }
+  //   fetch("/api", options)
+
+  // },[])
 
 
 
   function handleClickCheckboxes(event){ // Changes the isSelected value of checkboxes
     const {name,value} = event.target
+    const propertyName = "valueName" // * Property Name of the objects fetched from api: {valueName:...,isSelected:...}
     setFormData(prevFormData => ({
       ...prevFormData,
-      [name]: prevFormData[name].map(obj => value === obj[name === "majors"  ? "major" : "GE"] ? 
+      [name]: prevFormData[name].map(obj => value === obj[propertyName] ? 
         {...obj, isSelected: !obj.isSelected} : obj)
     }))
 
@@ -57,6 +73,7 @@ function App() {
       <Body 
       handleClickCheckboxes={handleClickCheckboxes}
       formData={formData}
+      socket={socket}
       />
       {/* {!collegeMajors ? "Loading..." : collegeMajors} */}
     </div>

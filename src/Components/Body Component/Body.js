@@ -1,7 +1,10 @@
 import {useState,useEffect} from "react"
 export default function Body(props){
-    const {majors,genEd} = props.formData
+    const {selectedMajors,selectedGenEd} = props.formData
     const {checkBoxMajor,checkBoxGE} = createCheckboxes()
+
+    const {socket} = props // socket.io
+
 
     // const {checkBoxArr, checkBoxGE} = getCheckBoxes()
 
@@ -12,28 +15,28 @@ export default function Body(props){
 
         if(props.formData){ // Only runs when the data is rendered
 
-            returnObject.checkBoxMajor = majors.map(majorObj =>(
-            <label key={majorObj.major} htmlFor={majorObj.major}>
+            returnObject.checkBoxMajor = selectedMajors.map(majorObj =>(
+            <label key={majorObj.valueName} htmlFor={majorObj.valueName}>
                 <input
                 type="checkbox"
-                name="majors"
-                value={majorObj.major}
-                id={majorObj.major}
+                name="selectedMajors"
+                value={majorObj.valueName}
+                id={majorObj.valueName}
                 onChange={props.handleClickCheckboxes}
                 />
-                {majorObj.major}
+                {majorObj.valueName}
             </label>))
 
-            returnObject.checkBoxGE = genEd.map(GE_Obj =>(
-                <label key={GE_Obj.GE} htmlFor={GE_Obj.GE}>
+            returnObject.checkBoxGE = selectedGenEd.map(GE_Obj =>(
+                <label key={GE_Obj.valueName} htmlFor={GE_Obj.valueName}>
                     <input
                     type="checkbox"
-                    name="genEd"
-                    value={GE_Obj.GE}
-                    id={GE_Obj.GE}
+                    name="selectedGenEd"
+                    value={GE_Obj.valueName}
+                    id={GE_Obj.valueName}
                     onChange={props.handleClickCheckboxes}
                     />
-                    {GE_Obj.GE}
+                    {GE_Obj.valueName}
                 </label>))
 
         }
@@ -44,17 +47,33 @@ export default function Body(props){
 
     //   {!props.collegeMajors ? "Loading" : props.collegeMajors}
     
+    function handleSubmit(event){
+        event.preventDefault()
+        const requestMajors = props.formData.selectedMajors.filter(obj => obj.isSelected)
+        const requestGE = props.formData.selectedGenEd.filter(obj => obj.isSelected)
+        // console.log("Reqeust: ",requestMajors)
+        // console.log("Request: ", requestGE)
+
+        socket.emit("find_classes",{data:{
+            majors:requestMajors,
+            genEd:requestGE
+        }})
+        
+    }
 
     return(
-        <form>
+        <form onSubmit={handleSubmit}>
+            <h2>Major(s) & Minors</h2>
             <div className="checkBox--div scroll">
-                {!props.formData?  "Loading..." : checkBoxMajor }
+                {!selectedMajors?  "Loading..." : checkBoxMajor }
             </div>
 
+            <h2>G.E Requirements</h2>
             <div className="checkBox--div scroll">
-                {!props.formData?  "Loading..." : checkBoxGE }
+                {!selectedGenEd?  "Loading..." : checkBoxGE }
             </div>
 
+            <button>See available classes</button>
 
         </form>
 
