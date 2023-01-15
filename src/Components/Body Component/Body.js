@@ -49,14 +49,14 @@ export default function Body(props){
     
     function handleSubmit(event){
         event.preventDefault()
-        const requestMajors = props.formData.selectedMajors.filter(obj => obj.isSelected)
-        const requestGE = props.formData.selectedGenEd.filter(obj => obj.isSelected)
+        const requestedMajors = props.formData.selectedMajors.filter(obj => obj.isSelected)
+        const requestedGE = props.formData.selectedGenEd.filter(obj => obj.isSelected)
         // console.log("Reqeust: ",requestMajors)
         // console.log("Request: ", requestGE)
 
         socket.emit("find_classes",{data:{
-            majors:requestMajors,
-            genEd:requestGE
+            selectedMajors:requestedMajors,
+            selectedGenEd:requestedGE
         }})
         
     }

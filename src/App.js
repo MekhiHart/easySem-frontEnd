@@ -36,23 +36,6 @@ function App() {
       })))
   }, []);
 
-  // useEffect( () =>{
-
-  //   console.log("From Client")
-  //   const data = {"message":"Hello From Client"}
-  //   const options ={
-  //     method:"POST",
-  //     headers:{
-  //       "Content-type" : "application/json"
-  //     },
-  //     body: JSON.stringify(data)
-  //   }
-  //   fetch("/api", options)
-
-  // },[])
-
-
-
   function handleClickCheckboxes(event){ // Changes the isSelected value of checkboxes
     const {name,value} = event.target
     const propertyName = "valueName" // * Property Name of the objects fetched from api: {valueName:...,isSelected:...}
