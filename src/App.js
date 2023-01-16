@@ -18,6 +18,7 @@ function App() {
     classes:[],
 })
 
+
   useEffect(() => {
     fetch("/get_collegeMajors") //  fetches on the specific api you want it too
       .then((res) => res.json())
