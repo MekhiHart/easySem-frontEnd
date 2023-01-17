@@ -44,25 +44,50 @@ function App() {
     })))
   },[])
 
-
+  // selectedClasses = [{valueName:string, availableClasses:[{valueName:string,isSelected:false}]}]
 
 
   function handleClickCheckboxes(event){ // Changes the isSelected value of checkboxes
-    console.log("Clicked")
     const {name,value} = event.target
     const propertyName = "valueName" // * Property Name of the objects fetched from api: {valueName:...,isSelected:...}
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: prevFormData[name].map(obj => value === obj[propertyName] ? 
-        {...obj, isSelected: !obj.isSelected} : obj)
-    }))
+    if (name !== "selectedClasses"){ // if the checkbox is not selectedClasses
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: prevFormData[name].map(obj => value === obj[propertyName] ? 
+          {...obj, isSelected: !obj.isSelected} : obj)
+      }))
+    }
+
+    else{ // selectedClasses data
+      setFormData(prevFormData =>({
+        // prevFormData -> {selectedMajors: [], selectedGenEd:[], selectedClasses: []}
+        // selectedClasses array element -> {valueName:string,availableClasses:[]}
+        // selectedClasses.availableClasses array element -> {valueName:string, isSelected:bool}
+        ...prevFormData,
+        [name]: prevFormData[name].map(obj => { // name = selectedClasses
+          const valueArray = value.split(",") // * for some reason, the props does not take in an array
+          const category = valueArray[0] // ! this props is undefined, fix it
+          const valueName = valueArray[1]
+
+         if (category === obj[propertyName]){ // if it's the same category obj
+          const targetCategory = {...obj}
+          targetCategory.availableClasses = targetCategory.availableClasses.map(classObj => valueName === classObj[propertyName] ? // if it's the same class that the user selected, then it changes the selected value
+            {...classObj, isSelected:!classObj.isSelected} : classObj)
+
+          return targetCategory
+         }
+
+         return obj 
+        }  )
+      }))
+    }
 
 
   } //  handleSelect
 
   // console.log("formData: ",formData)
 
-  console.log("Form Data: ",formData)
+  // console.log("Form Data: ",formData)
 
   return (
     <div className="App">

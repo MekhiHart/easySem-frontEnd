@@ -3,40 +3,44 @@ export default function AvailableClasses(props){
     //classObj.availableClasses = {className}
     const {selectedClasses} = props.formData
     const divClasses = selectedClasses.map(classObj => {
-        const divTitle = classObj.valueName
+        const category = classObj.valueName
         const classesCheckbox = classObj.availableClasses.map(availableClass => (
-            <label key={availableClass.className} htmlFor={availableClass.className}>
+            <label key={availableClass.valueName} htmlFor={availableClass.valueName}>
                 <input 
                 type="checkbox"
-                name="availableClasses"
-                value={availableClass.className}
-                id={availableClass.className}
+                name="selectedClasses"
+                value={[category,availableClass.valueName]}
+                id={availableClass.valueName}
+                onChange={props.handleClickCheckboxes}
+                key={availableClass.valueName}
                 >
                 </input>
-                {availableClass.className}
+                {availableClass.valueName}
             </label>
         ))
         
-        console.log("Obj; ",classesCheckbox)
+        // console.log("Obj; ",classesCheckbox)
 
 
         return(
-            <div className="checkBox--div scroll">
-                <h3>{divTitle}</h3>
-                {classesCheckbox}
+            <div key={category}>
+                <h3>{category}</h3>
+                <div className="checkBox--div scroll">
+                    {classesCheckbox}
+                </div>
             </div>
 
         )
     })
 
-
-
-    console.log(selectedClasses)
-
     return(
         <form>
             <h2>Available Classes</h2>
             {divClasses}
+            <button>Generate Best Schedules!</button>
         </form>
     )
+
+
+    
 }
