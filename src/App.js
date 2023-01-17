@@ -15,7 +15,7 @@ function App() {
   const [formData, setFormData] = useState({
     selectedMajors:[],
     selectedGenEd:[],
-    classes:[],
+    selectedClasses:[],
 })
 
 
@@ -37,7 +37,18 @@ function App() {
       })))
   }, []);
 
+  useEffect( () =>{ // fetches data when selecting classes from majors and GE reqs
+    socket.on("getSelectedClasses", (data) => setFormData(prevFormData =>({
+      ...prevFormData,
+      selectedClasses: data
+    })))
+  },[])
+
+
+
+
   function handleClickCheckboxes(event){ // Changes the isSelected value of checkboxes
+    console.log("Clicked")
     const {name,value} = event.target
     const propertyName = "valueName" // * Property Name of the objects fetched from api: {valueName:...,isSelected:...}
     setFormData(prevFormData => ({
@@ -49,7 +60,9 @@ function App() {
 
   } //  handleSelect
 
+  // console.log("formData: ",formData)
 
+  console.log("Form Data: ",formData)
 
   return (
     <div className="App">
