@@ -2,6 +2,7 @@ export default function AvailableClasses(props){
     // classObj = {valueName:string, availableClasses:[]}
     //classObj.availableClasses = {className}
     const {selectedClasses} = props.formData
+    const {socket} = props
     const divClasses = selectedClasses.map(classObj => {
         const category = classObj.valueName
         const classesCheckbox = classObj.availableClasses.map(availableClass => (
@@ -34,12 +35,21 @@ export default function AvailableClasses(props){
     })
 
     return(
-        <form>
+        <form onSubmit={generateSchedule}>
             <h2>Available Classes</h2>
             {divClasses}
             <button>Generate Best Schedules!</button>
         </form>
     )
+
+    // selectedClasses -> [{valueName, availableClasses}]
+    // availableClasses -> {valueName,isSelected}
+    function generateSchedule(event){
+        event.preventDefault()
+        socket.emit("generateSchedule",selectedClasses)
+        
+
+    }
 
 
     
