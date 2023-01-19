@@ -18,6 +18,8 @@ function App() {
     selectedClasses:[],
 })
 
+  const [generatedSchedules,setGeneratedSchedules] = useState([])
+
 
   useEffect(() => {
     fetch("/get_collegeMajors") //  fetches on the specific api you want it too
@@ -44,8 +46,12 @@ function App() {
     })))
   },[])
 
-  // selectedClasses = [{valueName:string, availableClasses:[{valueName:string,isSelected:false}]}]
+  useEffect( () =>{
+    socket.on("recieve_GeneratedSchedule", data => console.log("Datas recieved: ",data))
+  },[])
 
+  // selectedClasses = [{valueName:string, availableClasses:[{valueName:string,isSelected:false}]}]
+  console.log("Generated Schedule: ",generatedSchedules)
 
   function handleClickCheckboxes(event){ // Changes the isSelected value of checkboxes
     const {name,value} = event.target
