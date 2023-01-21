@@ -14,6 +14,7 @@ export default function AvailableClasses(props){
                 id={availableClass.valueName}
                 onChange={props.handleClickCheckboxes}
                 key={availableClass.valueName}
+                checked={availableClass.isSelected}
                 >
                 </input>
                 {availableClass.valueName}

@@ -15,9 +15,10 @@ export default function Category(props){
         // console.log("Majors inside of child: ",majors)
         let returnObject = {checkBoxMajor:[], checkBoxGE:[]}
 
+
         if(props.formData){ // Only runs when the data is rendered
 
-            returnObject.checkBoxMajor = selectedMajors.map(majorObj =>(
+            returnObject.checkBoxMajor = selectedMajors.map(majorObj =>( // checkBoxes for majorClasses
             <label key={majorObj.valueName} htmlFor={majorObj.valueName}>
                 <input
                 type="checkbox"
@@ -25,6 +26,7 @@ export default function Category(props){
                 value={majorObj.valueName}
                 id={majorObj.valueName}
                 onChange={props.handleClickCheckboxes}
+                checked={majorObj.isSelected}
                 />
                 {majorObj.valueName}
             </label>))
@@ -37,6 +39,7 @@ export default function Category(props){
                     value={GE_Obj.valueName}
                     id={GE_Obj.valueName}
                     onChange={props.handleClickCheckboxes}
+                    checked={GE_Obj.isSelected}
                     />
                     {GE_Obj.valueName}
                 </label>))
@@ -87,7 +90,7 @@ export default function Category(props){
                 <div className="checkBox--div scroll">
                     {!isRendered?  "Loading..." : checkBoxGE }
                 </div>
-                <button>See available classes</button>
+                <button>getClasses</button>
             </form>
     )
 }
